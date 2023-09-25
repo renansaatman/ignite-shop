@@ -28,7 +28,7 @@ export const Product = styled('div', {
     bottom: '0.25rem',
     left: '0.25rem',
     right: '0.25rem',
-    padding: '2rem',
+    padding: '1.25rem 2rem 1.25rem 1.25rem',
 
     borderRadius: 6,
 
@@ -42,16 +42,41 @@ export const Product = styled('div', {
     opacity: 0,
     transition: 'all 0.2s ease-in-out',
 
-    strong: {
-      fontSize: '$lg',
-      color: '$gray100',
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 4,
+
+      strong: {
+        fontSize: '$lg',
+        color: '$gray100',
+      },
+  
+      span: {
+        fontSize: '$xl',
+        fontWeight: 'bold',
+        color: '$green300',
+      },
     },
 
-    span: {
-      fontSize: '$xl',
-      fontWeight: 'bold',
-      color: '$green300',
-    },
+    button: {
+      color: '$white',
+      backgroundColor: '$green500',
+
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      transition: 'background-color .2s',
+
+      '&:not(:disabled):hover': {
+        backgroundColor: '$green300',
+      },
+
+      border: 'none',
+      borderRadius: 6,
+      padding: 12,
+      cursor: 'pointer',
+    }
   },
 
   '&:hover': {
