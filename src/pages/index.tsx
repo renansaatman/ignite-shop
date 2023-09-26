@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useKeenSlider } from 'keen-slider/react'
-import { HomeContainer, Product } from "../styles/pages/home"
+import { HomeContainer, HomeContainerWrapper, Product } from "../styles/pages/home"
 
 import 'keen-slider/keen-slider.min.css'
 import { stripe } from "../lib/stripe"
@@ -9,7 +9,8 @@ import Stripe from "stripe"
 
 import Link from "next/link"
 import Head from "next/head"
-import { Handbag } from "@phosphor-icons/react"
+import { Handbag, CaretRight, CaretLeft } from "@phosphor-icons/react"
+import { MouseEvent, useState } from "react"
 
 interface HomeProps {
   products: {
@@ -21,42 +22,85 @@ interface HomeProps {
 }
 
 export default function Home({ products }: HomeProps) {
-  const [sliderRef] = useKeenSlider({
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [loaded, setLoaded] = useState(false)
+  const [sliderRef, instanceRef] = useKeenSlider({
     slides: {
-      perView: 3,
+      perView: 2,
       spacing: 48,
-    }
+    },
+    initial: 0,
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel)
+    },
+    created() {
+      setLoaded(true)
+    },
   })
+
+  function handleAddToCartClick(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+    event.preventDefault()
+
+    console.log('clicou no botão')
+  }
+
+  loaded && instanceRef.current && console.log(currentSlide)
   return (
     <>
       <Head>
         <title>Home | Ignite Shop</title>
       </Head>
 
-      <HomeContainer ref={sliderRef} className="keen-slider">
+      <HomeContainerWrapper>
+        <HomeContainer ref={sliderRef} className="keen-slider">
+          {
+            products.map(product => {
+              return (
+                <Link key={product.id} href={`/product/${product.id}`} prefetch={false}>
+                  <Product className="keen-slider__slide">
+                    <Image src={product.imageUrl} width={520} height={480} alt=""/>
+
+                    <footer>
+                      <div>
+                        <strong>{product.name}</strong>
+                        <span>{product.price}</span>
+                      </div>
+
+                      <button onClick={(e) => handleAddToCartClick(e)}>
+                        <Handbag size={32} weight="bold" />
+                      </button>
+                    </footer>
+                  </Product>
+                </Link>
+              )
+            })
+          }
+        </HomeContainer>
+
         {
-          products.map(product => {
-            return (
-              <Link key={product.id} href={`/product/${product.id}`} prefetch={false}>
-                <Product className="keen-slider__slide">
-                  <Image src={product.imageUrl} width={520} height={480} alt=""/>
-
-                  <footer>
-                    <div>
-                      <strong>{product.name}</strong>
-                      <span>{product.price}</span>
-                    </div>
-
-                    <button>
-                      <Handbag size={32} weight="bold" />
-                    </button>
-                  </footer>
-                </Product>
-              </Link>
-            )
-          })
+          loaded && instanceRef.current &&
+          (
+            <>
+              {currentSlide !== 0 &&
+                <button
+                  className='left'
+                  onClick={() => instanceRef.current.prev()}
+                >
+                  <CaretLeft size={48} />
+                </button>
+              }
+              {currentSlide !== instanceRef.current.track.details.slides.length - 2 &&
+                <button
+                  className='right'
+                  onClick={() => instanceRef.current.next()}
+                >
+                  <CaretRight size={48} />
+                </button>
+              }
+            </>
+          )
         }
-      </HomeContainer>
+      </HomeContainerWrapper>
     </>
   )
 }

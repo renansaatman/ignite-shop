@@ -1,14 +1,42 @@
 import { styled } from "..";
 
-export const HomeContainer = styled('main', {
+export const HomeContainerWrapper = styled('div', {
   display: 'flex',
+  position: 'relative',
+
   width: '100%',
   maxWidth: 'calc(100vw - ((100vw - 1180px) / 2))',
   marginLeft: 'auto',
+  
+  '& > button': {
+    color: '$gray300',
+    width: 136,
+    minHeight: 656,
+    border: 0,
+    position: 'absolute',
+  },
+  
+  '.left': {
+    background: 'linear-gradient(to right, $gray900, transparent)',
+  },
+  
+  '.right': {
+    background: 'linear-gradient(to left, $gray900, transparent)',
+    right: 0
+  },
+
+})
+
+export const HomeContainer = styled('main', {
+  // display: 'flex',
+  // width: '100%',
+  // maxWidth: 'calc(100vw - ((100vw - 1180px) / 2))',
+  // marginLeft: 'auto',
   minHeight: 656,
 })
 
 export const Product = styled('div', {
+  width: 696,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   borderRadius: 8,
   cursor: 'pointer',
