@@ -10,8 +10,9 @@ import Stripe from "stripe"
 import Link from "next/link"
 import Head from "next/head"
 import { Handbag, CaretRight, CaretLeft } from "@phosphor-icons/react"
-import { MouseEvent, useContext, useState } from "react"
+import { MouseEvent, useContext, useEffect, useState } from "react"
 import { CartContext } from "../contexts/CartContext"
+import ProductSkeleton from "../components/ProductSkeleton"
 
 interface HomeProps {
   products: {
@@ -30,6 +31,7 @@ export default function Home({ products }: HomeProps) {
 
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loaded, setLoaded] = useState(false)
+
   const [sliderRef, instanceRef] = useKeenSlider({
     slides: {
       perView: 2,
@@ -49,6 +51,7 @@ export default function Home({ products }: HomeProps) {
 
     addToCart(product)
   }
+
   return (
     <>
       <Head>

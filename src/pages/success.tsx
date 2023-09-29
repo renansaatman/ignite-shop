@@ -12,8 +12,6 @@ interface SuccessProps {
 }
 
 export default function Success({customerName, productsImages}: SuccessProps) {
-
-
   return (
     <>
       <Head>

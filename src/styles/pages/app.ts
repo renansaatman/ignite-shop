@@ -29,7 +29,17 @@ export const Header = styled('header', {
 
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between'
+
+  variants: {
+    justify: {
+      center: {
+        justifyContent: 'center'
+      },
+      spaceBetween: {
+        justifyContent: 'space-between'
+      }
+    }
+  }
 })
 
 export const Button = styled('button', {
