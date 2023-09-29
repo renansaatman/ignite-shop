@@ -56,6 +56,9 @@ export const Button = styled('button', {
         color: '$gray100'
       }
     }
+  },
+  '&:disabled': {
+    cursor: 'not-allowed',
   }
 })
 
@@ -108,6 +111,7 @@ export const CartContent = styled(Dialog.Content, {
 
   img: {
     borderRadius: 8,
+    background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
   }
 })
 

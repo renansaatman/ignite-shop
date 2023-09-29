@@ -10,7 +10,8 @@ import Stripe from "stripe"
 import Link from "next/link"
 import Head from "next/head"
 import { Handbag, CaretRight, CaretLeft } from "@phosphor-icons/react"
-import { MouseEvent, useState } from "react"
+import { MouseEvent, useContext, useState } from "react"
+import { CartContext } from "../contexts/CartContext"
 
 interface HomeProps {
   products: {
@@ -18,10 +19,15 @@ interface HomeProps {
     name: string
     imageUrl: string
     price: string
+    numberPrice: number
+    description: string
+    defaultPriceId: string
   }[]
 }
 
 export default function Home({ products }: HomeProps) {
+  const { addToCart } = useContext(CartContext)
+
   const [currentSlide, setCurrentSlide] = useState(0)
   const [loaded, setLoaded] = useState(false)
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -38,13 +44,11 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
-  function handleAddToCartClick(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+  function handleAddToCartClick(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, product: HomeProps['products'][0]) {
     event.preventDefault()
 
-    console.log('clicou no botão')
+    addToCart(product)
   }
-
-  loaded && instanceRef.current && console.log(currentSlide)
   return (
     <>
       <Head>
@@ -66,7 +70,7 @@ export default function Home({ products }: HomeProps) {
                         <span>{product.price}</span>
                       </div>
 
-                      <button onClick={(e) => handleAddToCartClick(e)}>
+                      <button onClick={(e) => handleAddToCartClick(e, product)}>
                         <Handbag size={32} weight="bold" />
                       </button>
                     </footer>
@@ -120,6 +124,9 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount / 100),
+      numberPrice: price.unit_amount / 100,
+      description: product.description,
+      defaultPriceId: price.id,
     }
   })
 
